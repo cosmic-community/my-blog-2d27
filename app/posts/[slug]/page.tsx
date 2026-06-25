@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getPost } from '@/lib/cosmic'
 import { getMetafieldValue } from '@/lib/cosmic'
+import { markdownToHtml } from '@/lib/markdown'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -20,7 +21,8 @@ export default async function PostPage({ params }: PostPageProps) {
   const author = post.metadata?.author
   const category = post.metadata?.category
   const title = getMetafieldValue(post.metadata?.title) || post.title
-  const content = getMetafieldValue(post.metadata?.content)
+  const rawContent = getMetafieldValue(post.metadata?.content)
+  const contentHtml = markdownToHtml(rawContent)
   const tags = Array.isArray(post.metadata?.tags) ? post.metadata.tags : []
 
   return (
@@ -74,10 +76,10 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
       )}
 
-      {content && (
+      {contentHtml && (
         <div
           className="prose prose-lg mt-10 max-w-none prose-headings:font-bold prose-a:text-brand-600"
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
       )}
 
