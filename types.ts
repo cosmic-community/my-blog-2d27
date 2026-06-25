@@ -49,6 +49,15 @@ export interface Post extends CosmicObject {
   };
 }
 
+// Page object
+export interface Page extends CosmicObject {
+  type: 'pages';
+  metadata: {
+    content?: string;
+    hero_image?: CosmicImage;
+  };
+}
+
 // API response shape
 export interface CosmicResponse<T> {
   objects: T[];
@@ -68,4 +77,8 @@ export function isAuthor(obj: CosmicObject): obj is Author {
 
 export function isCategory(obj: CosmicObject): obj is Category {
   return obj.type === 'categories';
+}
+
+export function isPage(obj: CosmicObject): obj is Page {
+  return obj.type === 'pages';
 }
